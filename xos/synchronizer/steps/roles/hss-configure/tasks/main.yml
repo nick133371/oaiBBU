@@ -1,0 +1,46 @@
+- name: create oai config directory
+  file:
+    path: /usr/local/etc/oai/freeDiameter
+    state: directory
+
+- name: get service route interface name
+  shell: ip route | grep 10.0.6.0/24 | grep -oP '(?<=dev\s)\w+'
+  register: SERVICE_INTERFACE
+
+- name: set oai component interfaces
+  set_fact:
+    HSS_INTERFACE: "{{SERVICE_INTERFACE.stdout}}"
+
+- name: overwrite oai epc configs
+  template:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+  with_items:
+    - { src: 'acl.j2', dest: '/usr/local/etc/oai/freeDiameter/acl.conf' }
+    - { src: 'hss_fd.j2', dest: '/usr/local/etc/oai/freeDiameter/hss_fd.conf' }
+    - { src: 'hss.j2', dest: '/usr/local/etc/oai/hss.conf' }
+    - { src: 'oai_db.j2', dest: '~/oai_db.sql'}
+
+- name: set hosts
+  lineinfile:
+    name: /etc/hosts
+    line: "{{item.line}}"
+    regexp: "{{item.regex}}"
+  with_items:
+    - { regex: "{{HSS_HOST}}", line: '{{HSS_PRIVATE_IP}} {{HSS_HOST}} {{HSS_ALIAS}}' }
+    - { regex: "{{MME_HOST}}", line: '{{MME_PRIVATE_IP}} {{MME_HOST}} {{MME_ALIAS}}'}
+
+- name: drop oai_db database
+  mysql_db:
+    login_user: root
+    login_password: linux
+    name: oai_db
+    state: absent
+
+- name: import oai_db sql
+  mysql_db:
+    login_user: root
+    login_password: linux
+    name: oai_db
+    state: import
+    target: ~/oai_db.sql
