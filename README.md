@@ -1,2 +1,2 @@
-# vHSS: Virtual Home Subscriber Server
+# oaiBBU : virtual RAN for OAI eNB
 
