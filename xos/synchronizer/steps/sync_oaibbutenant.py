@@ -15,27 +15,31 @@
 import os
 import sys
 from django.db.models import Q, F
-#from services.vhss.models import VHSSService, VHSSTenant
+#from services.oaibbu.models import OAIBBUService, OAIBBUTenant
 from synchronizers.new_base.modelaccessor import *
 from synchronizers.new_base.SyncInstanceUsingAnsible import SyncInstanceUsingAnsible
 
 parentdir = os.path.join(os.path.dirname(__file__), "..")
 sys.path.insert(0, parentdir)
 
-class SyncVHSSTenant(SyncInstanceUsingAnsible):
+class SyncOAIBBUTenant(SyncInstanceUsingAnsible):
 
-    provides = [VHSSTenant]
+    # Used by XOSObserver : sync_steps to determine dependencies.
+    provides = [OAIBBUTenant]
 
-    observes = VHSSTenant
+    # The Tenant that is synchronized.
+    observes = OAIBBUTenant
 
     requested_interval = 0
 
-    template_name = "vhsstenant_playbook.yaml"
+    # Name of the ansible playbook to run.
+    template_name = "oaibbutenant_playbook.yaml"
 
+    # Path to the SSH key used by Ansible.
     service_key_name = "/opt/xos/configurations/mcord/mcord_private_key"
 
     def __init__(self, *args, **kwargs):
-        super(SyncVHSSTenant, self).__init__(*args, **kwargs)
+        super(SyncOAIBBUTenant, self).__init__(*args, **kwargs)
 
     def get_network_id(self, network_name):
         network = Network.objects.filter(name=network_name).first()
@@ -49,6 +53,8 @@ class SyncVHSSTenant(SyncInstanceUsingAnsible):
 
     def get_information(self, o):
         fields = {}
+
+        # not sure if this part need to modify, need to check further network setting
 
         collect_network = [
            {'name': 'HSS_PRIVATE_IP', 'net_name': 'vhss_network'}

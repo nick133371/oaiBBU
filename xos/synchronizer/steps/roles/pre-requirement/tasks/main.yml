@@ -1,3 +1,3 @@
-- name: set host name of hss
+- name: set host name of bbu
   hostname:
-    name: "vhss"
+    name: "oaibbu"

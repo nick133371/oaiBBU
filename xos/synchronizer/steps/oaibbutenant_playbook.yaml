@@ -13,7 +13,9 @@
 # limitations under the License.
 
 ---
-# vhsstenant_playbook
+# oaibbu_playbook
+
+# Still need to check hss-configure
 
 - hosts: {{ instance_name }}
   gather_facts: False
