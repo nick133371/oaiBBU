@@ -14,22 +14,21 @@
 
 tosca_definitions_version: tosca_simple_yaml_1_0
 
-description: Onboard the vHSS service
+description: Onboard the oaiBBU service
 
 imports:
   - custom_types/xos.yaml
 
 topology_template:
   node_templates:
-    servicecontroller#vhss:
+    servicecontroller#oaibbu:
       type: tosca.nodes.ServiceController
       properties:
-          base_url: file:///opt/xos_services/vhss/xos/
+          base_url: file:///opt/xos_services/oaibbu/xos/
           # The following will concatenate with base_url automatically, if
           # base_url is non-null.
           xproto: ./
           synchronizer: synchronizer/manifest  
-          synchronizer_run: vhss-synchronizer.py
+          synchronizer_run: oaibbu-synchronizer.py
           private_key: file:///opt/xos/key_import/mcord_rsa
           public_key: file:///opt/xos/key_import/mcord_rsa.pub
-
