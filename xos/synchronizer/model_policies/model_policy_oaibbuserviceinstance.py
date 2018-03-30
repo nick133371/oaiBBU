@@ -18,8 +18,8 @@ from synchronizers.new_base.modelaccessor import *
 from synchronizers.new_base.model_policies.model_policy_tenantwithcontainer import TenantWithContainerPolicy, LeastLoadedNodeScheduler
 from synchronizers.new_base.exceptions import *
 
-class OAIBBUTenantPolicy(TenantWithContainerPolicy):
-    model_name = "OAIBBUTenant"
+class OAIBBUServiceInstancePolicy(TenantWithContainerPolicy):
+    model_name = "OAIBBUServiceInstance"
 
     def handle_create(self, service_instance):
         return self.handle_update(service_instance)
@@ -28,7 +28,7 @@ class OAIBBUTenantPolicy(TenantWithContainerPolicy):
         if (service_instance.link_deleted_count>0) and (not service_instance.provided_links.exists()):
             self.logger.info("The last provided link has been deleted -- self-destructing.")
             self.handle_delete(service_instance)
-            if OAIBBUTenant.objects.filter(id=service_instance.id).exists():
+            if OAIBBUServiceInstance.objects.filter(id=service_instance.id).exists():
                 service_instance.delete()
             else:
                 self.logger.info("Tenant %s is already deleted" % service_instance)
@@ -41,10 +41,10 @@ class OAIBBUTenantPolicy(TenantWithContainerPolicy):
             all_service_instances_this_instance = VHSSTenant.objects.filter(instance_id=service_instance.instance.id)
             other_service_instances_this_instance = [x for x in all_service_instances_this_instance if x.id != service_instance.id]
             if (not other_service_instances_this_instance):
-                self.logger.info("OAIBBUTenant Instance %s is now unused -- deleting" % service_instance.instance)
+                self.logger.info("OAIBBUServiceInstance Instance %s is now unused -- deleting" % service_instance.instance)
                 self.delete_instance(service_instance, service_instance.instance)
             else:
-                self.logger.info("OAIBBUTenant Instance %s has %d other service instances attached" % (service_instance.instance, len(other_service_instances_this_instance)))
+                self.logger.info("OAIBBUServiceInstance Instance %s has %d other service instances attached" % (service_instance.instance, len(other_service_instances_this_instance)))
 
     def get_service(self, service_instance):
         service_name = service_instance.owner.leaf_model_name
@@ -129,7 +129,7 @@ class OAIBBUTenantPolicy(TenantWithContainerPolicy):
 
     def save_instance(self, service_instance, instance):
         instance.no_sync = True   # prevent instance from being synced until we're done with it
-        super(OAIBBUTenantPolicy, self).save_instance(instance)
+        super(OAIBBUServiceInstance, self).save_instance(instance)
 
         try:
             if instance.isolation in ["container", "container_vm"]:
@@ -143,16 +143,16 @@ class OAIBBUTenantPolicy(TenantWithContainerPolicy):
                     tag.save()
 
             instance.no_sync = False   # allow the synchronizer to run now
-            super(OAIBBUTenantPolicy, self).save_instance(instance)
+            super(OAIBBUServiceInstance, self).save_instance(instance)
         except:
             # need to clean up any failures here
             raise
-    
+
     def get_instance_tag(self, service_instance):
         return '%d'%service_instance.id
-    
+
     def get_image(self, service_instance):
         return service_instance.oaibbu_vendor.image
-    
+
     def get_flavor(self, service_vendor):
         return service_vendor.oaibbu_vendor.flavor

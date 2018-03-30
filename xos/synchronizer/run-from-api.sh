@@ -13,4 +13,4 @@
 # limitations under the License.
 
 
-python oaibbu-synchronizer.py
+python oaibbuservice-synchronizer.py

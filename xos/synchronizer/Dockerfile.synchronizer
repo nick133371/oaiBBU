@@ -15,15 +15,15 @@
 # xosproject/oaibbu-synchronizer
 FROM xosproject/xos-synchronizer-base:candidate
 
-COPY . /opt/xos/synchronizers/oaibbu
+COPY . /opt/xos/synchronizers/oaibbuservice
 
 ENTRYPOINT []
 
-WORKDIR "/opt/xos/synchronizers/oaibbu"
+WORKDIR "/opt/xos/synchronizers/oaibbuservice"
 
 # Label image
 ARG org_label_schema_schema_version=1.0
-ARG org_label_schema_name=oaibbu-synchronizer
+ARG org_label_schema_name=oaibbuservice-synchronizer
 ARG org_label_schema_version=unknown
 ARG org_label_schema_vcs_url=unknown
 ARG org_label_schema_vcs_ref=unknown

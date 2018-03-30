@@ -1,3 +1,0 @@
-- name: set host name of bbu
-  hostname:
-    name: "oaibbu"

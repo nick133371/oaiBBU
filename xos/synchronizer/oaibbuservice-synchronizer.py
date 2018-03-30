@@ -12,12 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#!/usr/bin/env python
 
-name: oaibbu-synchronizer
-accessor:
-  username: xosadmin@opencord.org
-  password: "@/opt/xos/services/oaibbu/credentials/xosadmin@opencord.org"
-dependency_graph: "/opt/xos/synchronizers/oaibbu/model-deps"
-steps_dir: "/opt/xos/synchronizers/oaibbu/steps"
-sys_dir: "/opt/xos/synchronizers/oaibbu/sys"
-model_policies_dir: "/opt/xos/synchronizers/oaibbu/model_policies"
+# This imports and runs ../../xos-observer.py
+
+import importlib
+import os
+import sys
+
+from xosconfig import Config
+config_file = os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + '/oaibbuservice_config.yaml')
+
+Config.init(config_file, 'synchronizer-config-schema.yaml')
+observer_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../../synchronizers/new_base")
+
+sys.path.append(observer_path)
+mod = importlib.import_module("xos-synchronizer")
+mod.main()

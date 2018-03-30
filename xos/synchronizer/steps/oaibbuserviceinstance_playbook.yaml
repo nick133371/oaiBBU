@@ -15,17 +15,10 @@
 ---
 # oaibbu_playbook
 
-# Still need to check hss-configure
-
-- hosts: {{ instance_name }}
-  gather_facts: False
+- hosts: "{{ instance_name }}"
   connection: ssh
   user: ubuntu
   sudo: yes
   gather_facts: no
   vars:
-    - MME_PRIVATE_IP: "10.0.6.1"
-    - HSS_PRIVATE_IP: "{{ HSS_PRIVATE_IP }}"
-  roles: 
-    - pre-requirement
-    - hss-configure
+  roles:
