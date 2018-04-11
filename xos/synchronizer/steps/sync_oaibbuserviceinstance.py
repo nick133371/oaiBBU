@@ -14,32 +14,31 @@
 
 import os
 import sys
-from django.db.models import Q, F
-#from services.oaibbu.models import OAIBBUService, OAIBBUTenant
-from synchronizers.new_base.modelaccessor import *
 from synchronizers.new_base.SyncInstanceUsingAnsible import SyncInstanceUsingAnsible
+from synchronizers.new_base.modelaccessor import *
+from xos.logger import Logger, logging
 
 parentdir = os.path.join(os.path.dirname(__file__), "..")
 sys.path.insert(0, parentdir)
 
+logger = Logger(level=logging.INFO)
+
 class SyncOAIBBUServiceInstance(SyncInstanceUsingAnsible):
 
-    # Used by XOSObserver : sync_steps to determine dependencies.
     provides = [OAIBBUServiceInstance]
 
-    # The service instance that is synchronized.
     observes = OAIBBUServiceInstance
 
     requested_interval = 0
 
-    # Name of the ansible playbook to run.
     template_name = "oaibbuserviceinstance_playbook.yaml"
 
-    # Path to the SSH key used by Ansible.
-    service_key_name = "/opt/xos/configurations/mcord/mcord_private_key"
+    service_key_name = "/opt/xos/synchronizers/oaibbuservice/oaibbuservice_private_key"
+
+    watches = [ModelLink(ServiceDependency,via='servicedependency'), ModelLink(ServiceMonitoringAgentInfo,via='monitoringagentinfo')]
 
     def __init__(self, *args, **kwargs):
-        super(SyncOAIBBUTenant, self).__init__(*args, **kwargs)
+        super(SyncOAIBBUServiceInstance, self).__init__(*args, **kwargs)
 
     def get_oaibbuservice(self, o):
         if not o.owner:
@@ -77,4 +76,35 @@ class SyncOAIBBUServiceInstance(SyncInstanceUsingAnsible):
     def delete_record(self, port):
         # Nothing needs to be done to delete an oaibbuservice; it goes away
         # when the instance holding the oaibbuservice is deleted.
+        pass
+
+    def handle_service_monitoringagentinfo_watch_notification(self, monitoring_agent_info):
+        if not monitoring_agent_info.service:
+            logger.info("handle watch notifications for service monitoring agent info...ignoring because service attribute in monitoring agent info:%s is null" % (monitoring_agent_info))
+            return
+
+        if not monitoring_agent_info.target_uri:
+            logger.info("handle watch notifications for service monitoring agent info...ignoring because target_uri attribute in monitoring agent info:%s is null" % (monitoring_agent_info))
+            return
+
+        objs = OAIBBUServiceInstance.objects.all()
+        for obj in objs:
+            if obj.owner.id != monitoring_agent_info.service.id:
+                logger.info("handle watch notifications for service monitoring agent info...ignoring because service attribute in monitoring agent info:%s is not matching" % (monitoring_agent_info))
+                return
+
+            instance = self.get_instance(obj)
+            if not instance:
+               logger.warn("handle watch notifications for service monitoring agent info...: No valid instance found for object %s" % (str(obj)))
+               return
+
+            logger.info("handling watch notification for monitoring agent info:%s for OAIBBUServiceInstance object:%s" % (monitoring_agent_info, obj))
+
+            #Run ansible playbook to update the routing table entries in the instance
+            fields = self.get_ansible_fields(instance)
+            fields["ansible_tag"] =  obj.__class__.__name__ + "_" + str(obj.id) + "_monitoring"
+            fields["target_uri"] = monitoring_agent_info.target_uri
+
+            template_name = "monitoring_agent.yaml"
+            super(SyncOAIBBUServiceInstance, self).run_playbook(obj, fields, template_name)
         pass

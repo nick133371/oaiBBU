@@ -1,5 +1,4 @@
 
-
 # Copyright 2017-present Open Networking Foundation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from synchronizers.new_base.modelaccessor import *
-from synchronizers.new_base.model_policies.model_policy_tenantwithcontainer import TenantWithContainerPolicy
 
-class OAIBBUServiceInstancePolicy(TenantWithContainerPolicy):
-    model_name = "OAIBBUServiceInstance"
+# models.py - OAI BBU service
+
+from core.models import Service, TenantWithContainer, XOSBase
+from django.db.models import *

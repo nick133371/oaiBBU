@@ -1,3 +1,4 @@
+
 # Copyright 2017-present Open Networking Foundation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,10 +20,10 @@ accessor:
   password: "@/opt/xos/services/oaibbu/credentials/xosadmin@opencord.org"
 required_models:
   - OAIBBUService
-  - OAIBBUVendor
   - OAIBBUServiceInstance
   - ServiceDependency
+  - ServiceMonitoringAgentInfo
 dependency_graph: "/opt/xos/synchronizers/oaibbuservice/model-deps"
 steps_dir: "/opt/xos/synchronizers/oaibbuservice/steps"
-sys_dir: "/opt/xos/synchronizers/oaibbuservice/sys"s
+sys_dir: "/opt/xos/synchronizers/oaibbuservice/sys"
 model_policies_dir: "/opt/xos/synchronizers/oaibbuservice/model_policies"

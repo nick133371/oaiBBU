@@ -1,4 +1,3 @@
-#! /bin/bash
 
 # Copyright 2017-present Open Networking Foundation
 #
@@ -14,4 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-find synchronizer -type f | cut -b 14- > synchronizer/manifest 
+
+# models.py -  ExampleService Models
+
+from core.models import Service, TenantWithContainer, XOSBase
+from django.db.models import *
