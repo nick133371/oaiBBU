@@ -14,6 +14,7 @@
 
 import os
 import sys
+#from services.oaibbu.models import OAIBBUService, OAIBBUTenant
 from synchronizers.new_base.SyncInstanceUsingAnsible import SyncInstanceUsingAnsible
 from synchronizers.new_base.modelaccessor import *
 from xos.logger import Logger, logging
@@ -25,14 +26,18 @@ logger = Logger(level=logging.INFO)
 
 class SyncOAIBBUServiceInstance(SyncInstanceUsingAnsible):
 
+    # Used by XOSObserver : sync_steps to determine dependencies.
     provides = [OAIBBUServiceInstance]
 
+    # The Tenant that is synchronized.
     observes = OAIBBUServiceInstance
 
     requested_interval = 0
 
+    # Name of the ansible playbook to run.
     template_name = "oaibbuserviceinstance_playbook.yaml"
 
+    # Path to the SSH key used by Ansible.
     service_key_name = "/opt/xos/synchronizers/oaibbuservice/oaibbuservice_private_key"
 
     watches = [ModelLink(ServiceDependency,via='servicedependency'), ModelLink(ServiceMonitoringAgentInfo,via='monitoringagentinfo')]
