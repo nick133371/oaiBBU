@@ -1,5 +1,6 @@
 option app_label = "oaibbuservice";
 option name = "oaibbuservice";
+option verbose_name = "OAI Service";
 
 message OAIBBUService (Service){
     option verbose_name = "OAI BBU Service";
@@ -7,4 +8,6 @@ message OAIBBUService (Service){
 
 message OAIBBUServiceInstance (TenantWithContainer){
      option verbose_name = "OAI BBU Service Instance";
+     option name = "oaibbuinstance";
+     required string tenant_message = 1 [help_text = "Tenant Message to Display", max_length = 254, null = False, db_index = False, blank = False];
 }
