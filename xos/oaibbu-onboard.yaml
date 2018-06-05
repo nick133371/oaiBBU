@@ -23,12 +23,14 @@ imports:
 
 topology_template:
   node_templates:
-    oaibbuservice:
+    servicecontroller#oaibbuservice:
       type: tosca.nodes.ServiceController
       properties:
           base_url: file:///opt/xos_services/oaibbu/xos/
           # The following will concatenate with base_url automatically, if
           # base_url is non-null.
           xproto: ./
+          synchronizer: synchronizer/manifest
+          synchronizer_run: oaibbuservice-synchronizer.py
           private_key: file:///opt/xos/key_import/mcord_rsa
           public_key: file:///opt/xos/key_import/mcord_rsa.pub
