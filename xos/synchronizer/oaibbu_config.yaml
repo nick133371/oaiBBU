@@ -13,17 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-name: oaibbuservice-synchronizer
+name: oaibbu-synchronizer
 accessor:
   username: xosadmin@opencord.org
   password: "@/opt/xos/services/oaibbu/credentials/xosadmin@opencord.org"
-required_models:
-  - OAIBBUService
-  - OAIBBUServiceInstance
-  - ServiceDependency
-  - ServiceMonitoringAgentInfo
-dependency_graph: "/opt/xos/synchronizers/oaibbuservice/model-deps"
-steps_dir: "/opt/xos/synchronizers/oaibbuservice/steps"
-sys_dir: "/opt/xos/synchronizers/oaibbuservice/sys"
-model_policies_dir: "/opt/xos/synchronizers/oaibbuservice/model_policies"
+dependency_graph: "/opt/xos/synchronizers/oaibbu/model-deps"
+steps_dir: "/opt/xos/synchronizers/oaibbu/steps"
+sys_dir: "/opt/xos/synchronizers/oaibbu/sys"
+model_policies_dir: "/opt/xos/synchronizers/oaibbu/model_policies"

@@ -1,4 +1,4 @@
-
+#! /bin/bash
 
 # Copyright 2017-present Open Networking Foundation
 #
@@ -14,8 +14,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from synchronizers.new_base.modelaccessor import *
-from synchronizers.new_base.model_policies.model_policy_tenantwithcontainer import TenantWithContainerPolicy
-
-class OAIBBUServiceInstancePolicy(TenantWithContainerPolicy):
-    model_name = "OAIBBUServiceInstance"
+find synchronizer -type f | cut -b 14- > synchronizer/manifest 

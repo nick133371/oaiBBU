@@ -1,4 +1,3 @@
-
 # Copyright 2017-present Open Networking Foundation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 tosca_definitions_version: tosca_simple_yaml_1_0
 
 description: Onboard the oaibbu service
@@ -23,7 +21,7 @@ imports:
 
 topology_template:
   node_templates:
-    servicecontroller#oaibbuservice:
+    servicecontroller#oaibbu:
       type: tosca.nodes.ServiceController
       properties:
           base_url: file:///opt/xos_services/oaibbu/xos/
@@ -31,6 +29,6 @@ topology_template:
           # base_url is non-null.
           xproto: ./
           synchronizer: synchronizer/manifest
-          synchronizer_run: oaibbuservice-synchronizer.py
+          synchronizer_run: oaibbu-synchronizer.py
           private_key: file:///opt/xos/key_import/mcord_rsa
           public_key: file:///opt/xos/key_import/mcord_rsa.pub

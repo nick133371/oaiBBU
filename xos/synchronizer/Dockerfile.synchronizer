@@ -12,18 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# xosproject/oaibbuservice-synchronizer
+# xosproject/oaibbu-synchronizer
 FROM xosproject/xos-synchronizer-base:candidate
 
-COPY . /opt/xos/synchronizers/oaibbuservice
+COPY . /opt/xos/synchronizers/oaibbu
 
 ENTRYPOINT []
 
-WORKDIR "/opt/xos/synchronizers/oaibbuservice"
+WORKDIR "/opt/xos/synchronizers/oaibbu"
 
 # Label image
 ARG org_label_schema_schema_version=1.0
-ARG org_label_schema_name=oaibbuservice-synchronizer
+ARG org_label_schema_name=oaibbu-synchronizer
 ARG org_label_schema_version=unknown
 ARG org_label_schema_vcs_url=unknown
 ARG org_label_schema_vcs_ref=unknown
@@ -50,4 +50,4 @@ LABEL org.label-schema.schema-version=$org_label_schema_schema_version \
       org.opencord.component.xos.vcs-url=$org_opencord_component_xos_vcs_url \
       org.opencord.component.xos.vcs-ref=$org_opencord_component_xos_vcs_ref
 
-CMD bash -c "cd /opt/xos/synchronizers/oaibbuservice; ./run-from-api.sh"
+CMD bash -c "cd /opt/xos/synchronizers/oaibbu; ./run-from-api.sh"

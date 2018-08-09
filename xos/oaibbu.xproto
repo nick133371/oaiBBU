@@ -1,13 +1,20 @@
-option app_label = "oaibbuservice";
-option name = "oaibbuservice";
-option verbose_name = "OAI Service";
+option name = "oaibbu";
+option app_label = "oaibbu";
 
 message OAIBBUService (Service){
-    option verbose_name = "OAI BBU Service";
+    option verbose_name = "Openair Interface Baseband Unit";
 }
 
-message OAIBBUServiceInstance (TenantWithContainer){
-     option verbose_name = "OAI BBU Service Instance";
-     option name = "oaibbuinstance";
-     required string tenant_message = 1 [help_text = "Tenant Message to Display", max_length = 254, null = False, db_index = False, blank = False];
+message OAIBBUVendor (XOSBase){
+    option verbose_name = "Openair Interface Baseband Unit Vendor";
+
+    required string name = 1 [help_text = "vendor name", max_length = 32, null = False, db_index = False, blank = False]; 
+    required manytoone image->Image:+ = 2 [help_text = "select image for this vendor", db_index = True, null = False, blank = False];
+    required manytoone flavor->Flavor:+ = 3 [help_text = "select openstack flavor for vendor image", db_index = True, null = False, blank = False];
+}
+
+message OAIBBUTenant (TenantWithContainer){
+    option verbose_name = "Openair Interface Baseband Unit  Service Instance";
+
+    optional manytoone oaibbu_vendor->OAIBBUVendor:vendor_tenants = 1 [help_text = "select vendor of choice, leave blank for slice default", db_index = True, null = True, blank = True]; 
 }

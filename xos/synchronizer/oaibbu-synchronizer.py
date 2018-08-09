@@ -1,4 +1,3 @@
-
 # Copyright 2017-present Open Networking Foundation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#!/usr/bin/env python
 
-# models.py -  ExampleService Models
+# This imports and runs ../../xos-observer.py
 
-from core.models import Service, TenantWithContainer, XOSBase
-from django.db.models import *
+import importlib
+import os
+import sys
+
+from xosconfig import Config
+config_file = os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + '/oaibbu_config.yaml')
+
+Config.init(config_file, 'synchronizer-config-schema.yaml')
+observer_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../../synchronizers/new_base")
+
+sys.path.append(observer_path)
+mod = importlib.import_module("xos-synchronizer")
+mod.main()
