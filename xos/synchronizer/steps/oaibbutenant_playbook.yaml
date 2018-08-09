@@ -15,10 +15,12 @@
 ---
 # oaibbu_playbook
 
-- hosts: "{{ instance_name }}"
+- hosts: {{ instance_name }}
+  gather_facts: False
   connection: ssh
   user: ubuntu
   sudo: yes
   gather_facts: no
   vars:
-  roles:
+  roles: 
+    - pre-requirement
