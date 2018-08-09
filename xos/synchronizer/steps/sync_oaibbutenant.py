@@ -22,7 +22,7 @@ from synchronizers.new_base.SyncInstanceUsingAnsible import SyncInstanceUsingAns
 parentdir = os.path.join(os.path.dirname(__file__), "..")
 sys.path.insert(0, parentdir)
 
-class SyncoOAIBBUTenant(SyncInstanceUsingAnsible):
+class SyncOAIBBUTenant(SyncInstanceUsingAnsible):
 
     # Used by XOSObserver : sync_steps to determine dependencies.
     provides = [OAIBBUTenant]
