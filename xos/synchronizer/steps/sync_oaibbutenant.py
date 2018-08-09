@@ -14,15 +14,13 @@
 
 import os
 import sys
+from django.db.models import Q, F
 #from services.oaibbu.models import OAIBBUService, OAIBBUTenant
-from synchronizers.new_base.SyncInstanceUsingAnsible import SyncInstanceUsingAnsible
 from synchronizers.new_base.modelaccessor import *
-from xos.logger import Logger, logging
+from synchronizers.new_base.SyncInstanceUsingAnsible import SyncInstanceUsingAnsible
 
 parentdir = os.path.join(os.path.dirname(__file__), "..")
 sys.path.insert(0, parentdir)
-
-logger = Logger(level=logging.INFO)
 
 class SyncoOAIBBUTenant(SyncInstanceUsingAnsible):
 
