@@ -24,7 +24,7 @@ sys.path.insert(0, parentdir)
 
 logger = Logger(level=logging.INFO)
 
-class SyncOAIBBUServiceInstance(SyncInstanceUsingAnsible):
+class SyncoOAIBBUTenant(SyncInstanceUsingAnsible):
 
     # Used by XOSObserver : sync_steps to determine dependencies.
     provides = [OAIBBUTenant]
