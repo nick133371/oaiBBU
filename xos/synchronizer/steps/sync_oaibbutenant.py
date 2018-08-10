@@ -39,7 +39,7 @@ class SyncOAIBBUTenant(SyncInstanceUsingAnsible):
     service_key_name = "/opt/xos/configurations/mcord/mcord_private_key"
 
     def __init__(self, *args, **kwargs):
-        super(SyncoOAIBBUTenant, self).__init__(*args, **kwargs)
+        super(SyncOAIBBUTenant, self).__init__(*args, **kwargs)
 
     def get_extra_attributes(self, o):
         fields = self.get_information(o)
