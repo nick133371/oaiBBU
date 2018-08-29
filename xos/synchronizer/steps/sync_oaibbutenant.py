@@ -41,40 +41,34 @@ class SyncOAIBBUTenant(SyncInstanceUsingAnsible):
     def __init__(self, *args, **kwargs):
         super(SyncOAIBBUTenant, self).__init__(*args, **kwargs)
 
-    def get_oaibbuservice(self, o):
-        if not o.owner:
-            return None
+    def get_network_id(self, network_name):
+        network = Network.objects.filter(name=network_name).first()
 
-        oaibbuservice = OAIBBUService.objects.filter(id=o.owner.id)
+        return network.id
 
-        if not oaibbuservice:
-            return None
+    def get_instance_object(self, instance_id):
+        instance = Instance.objects.filter(id=instance_id).first()
 
-        return oaibbuservice[0]
+        return instance
 
-    # Gets the attributes that are used by the Ansible template but are not
-    # part of the set of default attributes.
-    def get_extra_attributes(self, o):
+    def get_information(self, o):
         fields = {}
-        fields['tenant_message'] = o.tenant_message
-        oaibbuservice = self.get_oaibbuservice(o)
-        fields['service_message'] = oaibbuservice.service_message
 
-        if o.foreground_color:
-            fields["foreground_color"] = o.foreground_color.html_code
+        collect_network = [
+           {'name': 'BBU_PRIVATE_IP', 'net_name': 'oaibbu_network'}
+        ]
 
-        if o.background_color:
-            fields["background_color"] = o.background_color.html_code
+        instance = self.get_instance_object(o.instance_id)
 
-        images=[]
-        for image in o.embedded_images.all():
-            images.append({"name": image.name,
-                           "url": image.url})
-        fields["images"] = images
+        for data in collect_network:
+            network_id = self.get_network_id(data['net_name'])
+            port = filter(lambda x: x.network_id == network_id, instance.ports.all())[0]
+            fields[data['name']] = port.ip
 
         return fields
 
-    def delete_record(self, port):
-        # Nothing needs to be done to delete an oaibbuservice; it goes away
-        # when the instance holding the oaibbuservice is deleted.
-        pass
+    def get_extra_attributes(self, o):
+        fields = self.get_information(o)
+
+        return fields
+

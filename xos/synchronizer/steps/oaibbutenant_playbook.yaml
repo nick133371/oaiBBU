@@ -22,5 +22,6 @@
   sudo: yes
   gather_facts: no
   vars:
+    - BBU_PRIVATE_IP: "10.0.4.2"
   roles: 
     - pre-requirement
